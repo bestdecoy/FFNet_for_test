@@ -105,4 +105,91 @@ cd FFNet-VIC3D
 - 未预处理的 DAIR-V2X-Example 数据集 --> [下载](https://drive.google.com/file/d/1bFwWGXa6rMDimKeu7yJazAkGYO8s4RSI/view?usp=sharing)
 - 已预处理的 DAIR-V2X-C-Example 数据集 --> [下载](https://drive.google.com/file/d/1y8bGwI63TEBkDEh2JU_gdV7uidthSnoe/view?usp=sharing)
 
-(1) 对于原示例数据集DAIR-V2X-Example：
+对于原示例数据集DAIR-V2X-Example的具体数据形式：具体可以参考[这里](https://github.com/bestdecoy/FFNet_for_test/blob/main/docs/dair-v2x/DAIR-V2X-Examples.md)。
+
+进行数据预处理之前，将数据集放置到`./data/dair-v2x`下。  
+之后进行数据预处理，仅需：
+```
+python ./data/dair-v2x/preprocess.py --source-root ./data/dair-v2x/DAIR-V2X-Examples/cooperative-vehicle-infrastructure
+```
+> 其中，`--source-root`指的是：Raw data root of DAIR-V2X-C.
+
+由代码可知，数据预处理的对象主要是车路协同端的数据集，我们只需要观察`./data/dair-v2x/DAIR-V2X-Examples/cooperative-vehicle-infrastructure`内的变化即可。
+
+预处理前的文件树节选：
+
+```
+./data/dair-v2x/DAIR-V2X-Examples/cooperative-vehicle-infrastructure
+├─cooperative
+│  └─label_world
+...
+```
+运行脚本转换：
+![](https://pic1.imgdb.cn/item/646ce4810d2dde5777270450.jpg)
+
+
+预处理后的文件树节选：
+
+```
+./data/dair-v2x/DAIR-V2X-Examples/cooperative-vehicle-infrastructure
+├─cooperative
+│  ├─calib
+│  │  └─lidar_i2v
+│  ├─label
+│  │  └─lidar
+│  └─label_world
+...
+```
+预处理用于将位于世界坐标系的车端与路端联合视角下的标注转化为点云图和生成变换参数及新的数据索引`data_info_new.json`。
+
+
+### 1.2 生成数据对
+同样是有脚本用于生成：
+
+`python ./data/dair-v2x/frame_pair_generation.py --source-root ./data/dair-v2x/DAIR-V2X-Examples/cooperative-vehicle-infrastructure
+`
+
+
+输出信息如下：
+![](https://pic1.imgdb.cn/item/646ce7810d2dde57772c2204.jpg)
+
+该脚本在文件系统中的输出为：   
+观察路径：`${FFNet_root}/data/dair-v2x/flow_data_jsons`，新生成了：
+```
+-rw-r--r-- 1 root root  42990 May 23 16:18 flow_data_info_train.json
+-rw-r--r-- 1 root root 143514 May 23 16:18 flow_data_info_train_2.json
+-rw-r--r-- 1 root root      2 May 23 16:18 flow_data_info_val_0.json
+-rw-r--r-- 1 root root      2 May 23 16:18 flow_data_info_val_1.json
+-rw-r--r-- 1 root root      2 May 23 16:18 flow_data_info_val_2.json
+-rw-r--r-- 1 root root      2 May 23 16:18 flow_data_info_val_3.json
+-rw-r--r-- 1 root root      2 May 23 16:18 flow_data_info_val_4.json
+-rw-r--r-- 1 root root      2 May 23 16:18 flow_data_info_val_5.json
+```
+参考[这里](https://github.com/haibao-yu/FFNet-VIC3D/blob/main/data/dair-v2x/README.md)，用于生成：
+> We construct the frame pairs to generate the json files for FFNet training and evaluation.
+
+回到项目脚本`./data/dair-v2x/frame_pair_generation.py`，发现切分依据在：
+```
+...
+132     split_json_path = os.path.join('./data/dair-v2x/split_datas', 'cooperative-split-data.json')
+133     split_jsons = read_json(split_json_path)
+...
+```
+位于`./data/dair-v2x/split_datas/cooperative-split-data.json`的json是其切分依据，是一个经过标注的数据索引，切分的关键函数如下：
+
+```
+def split_datas(data_infos, split_datas, split='val'):
+    data_infos_split = []
+
+    inf_split_datas = split_datas['infrastructure_split'][split]
+    for data_info in data_infos:
+        infrastructure_frame = data_info['infrastructure_image_path'].split('/')[-1].replace('.jpg', '')
+        if infrastructure_frame in inf_split_datas:
+            data_infos_split.append(data_info)
+
+    return data_infos_split
+```
+可见切分的依据便是该切分的json文件。
+
+## 2. 评估
+切分好准备的数据集为train，val以后，就可以进行评估了。
