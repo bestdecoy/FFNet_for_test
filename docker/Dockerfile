@@ -1,6 +1,6 @@
-ARG PYTORCH="1.9.0"
-ARG CUDA="11.1"
-ARG CUDNN="8"
+ARG PYTORCH="1.6.0"
+ARG CUDA="10.1"
+ARG CUDNN="7"
 # Check the tag version at https://hub.docker.com/r/pytorch/pytorch/tags
 FROM pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
 
@@ -45,10 +45,3 @@ RUN pip install --no-cache-dir -e .
 # Fix something wrong
 RUN pip install psutil==5.9.1 
 RUN pip install --upgrade git+https://github.com/klintan/pypcd.git
-
-# Install FFNet
-# RUN git clone https://github.com/haibao-yu/FFNet-VIC3D.git
-# RUN mv FFNet-VIC3D ffnet
-# RUN cd ffnet
-# RUN pip install -e . --user
-
