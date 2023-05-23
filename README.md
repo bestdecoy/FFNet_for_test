@@ -25,7 +25,7 @@ FFNet相关资源：
 
     > Docker使用的Linux发行版内核来自于WSL2，WSL需要虚拟化支持。
 
-# 实战：
+# 环境配置：
 完成了前期准备，就可以开始进行实战了，下面是简要流程。
 ## 1. 克隆项目
 
@@ -42,6 +42,14 @@ cd到项目地址`${repos_root}`后，直接克隆：
 ## 2. 制作image / Pull image from dockerhub
 
 用户可选自己通过本项目提供的Dockerfile自行制作image，或者从dockerhub上直接拉取笔者做好的镜像。
+
+在Dockerfile中显示，本镜像创建的环境为：
+
+```
+ARG PYTORCH="1.6.0"
+ARG CUDA="10.1"
+ARG CUDNN="7"
+```
 
 ## 对于制作image：
 
@@ -86,3 +94,15 @@ cd FFNet-VIC3D
 
 最后退出py交互环境：`quit()`
 
+# 测试
+在下面的环境将会介绍如何测试示例数据集。
+
+## 1. 数据准备
+有关DAIR-V2X数据集的情况参考[这里](https://github.com/haibao-yu/FFNet-VIC3D/blob/main/data/dair-v2x/README.md)。
+
+### 1.1 数据预处理
+在官方库中提供了两个示例数据集：
+- 未预处理的 DAIR-V2X-Example 数据集 --> [下载](https://drive.google.com/file/d/1bFwWGXa6rMDimKeu7yJazAkGYO8s4RSI/view?usp=sharing)
+- 已预处理的 DAIR-V2X-C-Example 数据集 --> [下载](https://drive.google.com/file/d/1y8bGwI63TEBkDEh2JU_gdV7uidthSnoe/view?usp=sharing)
+
+(1) 对于原示例数据集DAIR-V2X-Example：
