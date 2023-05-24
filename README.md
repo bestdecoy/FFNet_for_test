@@ -154,7 +154,7 @@ python ./data/dair-v2x/preprocess.py --source-root ./data/dair-v2x/DAIR-V2X-Exam
 │  └─label_world
 ...
 ```
-预处理用于将位于世界坐标系的车端与路端联合视角下的标注转化为点云图和生成变换参数及新的数据索引`data_info_new.json`。
+预处理用于将位于世界坐标系的车端与路端联合视角下的融合标注转化为点云为依据的标注文件和生成变换参数及新的数据索引`data_info_new.json`。
 
 
 ### 1.2 生成数据对
@@ -170,14 +170,14 @@ python ./data/dair-v2x/preprocess.py --source-root ./data/dair-v2x/DAIR-V2X-Exam
 该脚本在文件系统中的输出为：   
 观察路径：`${FFNet_root}/data/dair-v2x/flow_data_jsons`，新生成了：
 ```
--rw-r--r-- 1 root root  42990 May 23 16:18 flow_data_info_train.json
--rw-r--r-- 1 root root 143514 May 23 16:18 flow_data_info_train_2.json
--rw-r--r-- 1 root root      2 May 23 16:18 flow_data_info_val_0.json
--rw-r--r-- 1 root root      2 May 23 16:18 flow_data_info_val_1.json
--rw-r--r-- 1 root root      2 May 23 16:18 flow_data_info_val_2.json
--rw-r--r-- 1 root root      2 May 23 16:18 flow_data_info_val_3.json
--rw-r--r-- 1 root root      2 May 23 16:18 flow_data_info_val_4.json
--rw-r--r-- 1 root root      2 May 23 16:18 flow_data_info_val_5.json
+-rw-r--r-- 1 root root  42990 May 21 16:18 flow_data_info_train.json
+-rw-r--r-- 1 root root 143514 May 21 16:18 flow_data_info_train_2.json
+-rw-r--r-- 1 root root      2 May 21 16:18 flow_data_info_val_0.json
+-rw-r--r-- 1 root root      2 May 21 16:18 flow_data_info_val_1.json
+-rw-r--r-- 1 root root      2 May 21 16:18 flow_data_info_val_2.json
+-rw-r--r-- 1 root root      2 May 21 16:18 flow_data_info_val_3.json
+-rw-r--r-- 1 root root      2 May 21 16:18 flow_data_info_val_4.json
+-rw-r--r-- 1 root root      2 May 21 16:18 flow_data_info_val_5.json
 ```
 参考[这里](https://github.com/haibao-yu/FFNet-VIC3D/blob/main/data/dair-v2x/README.md)，用于生成：
 > We construct the frame pairs to generate the json files for FFNet training and evaluation.
