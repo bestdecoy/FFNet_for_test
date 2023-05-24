@@ -29,7 +29,7 @@ FFNet相关资源：
 完成了前期准备，就可以开始进行实战了，下面是简要流程。
 ## 1. 克隆项目
 
-在克隆项目以前，我们先创建一个工作区，用于挂在宿主机的地址到容器上，以便后续的操作：   
+在克隆项目以前，我们先创建一个工作区，用于挂载宿主机的地址到容器上，以便后续的操作：   
 
 ```
 cd ${your_workspace_dir}
@@ -93,6 +93,20 @@ cd FFNet-VIC3D
 - 返回gpu索引值：torch.cuda.current_device()
 
 最后退出py交互环境：`quit()`
+
+注：CUDA和GPU在Pytorch上不兼容的报错提示为：
+
+```
+>>> torch.cuda.get_device_name(0)
+/opt/conda/lib/python3.7/site-packages/torch/cuda/__init__.py:125: UserWarning:
+NVIDIA GeForce RTX 3060 Ti with CUDA capability sm_86 is not compatible with the current PyTorch installation.
+The current PyTorch install supports CUDA capabilities sm_37 sm_50 sm_60 sm_61 sm_70 sm_75 compute_37.
+If you want to use the NVIDIA GeForce RTX 3060 Ti GPU with PyTorch, please check the instructions at https://pytorch.org/get-started/locally/
+
+  warnings.warn(incompatible_device_warn.format(device_name, capability, " ".join(arch_list), device_name))
+'NVIDIA GeForce RTX 3060 Ti'
+```
+
 
 # 测试
 在下面的环境将会介绍如何测试示例数据集。
